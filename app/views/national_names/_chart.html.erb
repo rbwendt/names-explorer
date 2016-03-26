@@ -1,0 +1,4 @@
+<%= javascript_include_tag "https://code.highcharts.com/highcharts.js", "chartkick" %>
+<% base = (1880..2014).map{|i| [i, 0]}.to_h %>
+<% data = @all_names.group(:Year).reduce(base){|h, g| h[g.Year] = g.Count; h} %>
+<%= line_chart data %>

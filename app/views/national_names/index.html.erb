@@ -1,0 +1,38 @@
+<% if params[:Name].nil? %>
+  <h1>Names <%= "(#{@names.count})" unless @names.count.is_a?(Hash) %></h1>
+<% else %>
+  <h1><%= params[:Name] %></h1>
+<% end %>
+<%= form_tag("/national_names", method: "get") do %>
+  <%= label_tag(:q, "Name:") %>
+  <%= text_field_tag(:Name, params[:Name]) %>
+  <%= label_tag(:q, "Starts with:") %>
+  <%= text_field_tag(:starts_with, params[:starts_with]) %>
+  <%= number_field(:national_names, :Year, in: 1890..2014, step: 1, value: params.dig(:national_names, :Year)) %>
+  <%= radio_button_tag(:Gender, "M", params[:Gender] == 'M') %>
+  <%= label_tag(:Gender, "M") %>
+  <%= radio_button_tag(:Gender, "F", params[:Gender] == 'F') %>
+  <%= label_tag(:Gender, "F") %>
+  <%= submit_tag("Search") %>
+<% end %>
+<%= will_paginate @names %>
+<% unless params[:Name].blank? %>
+  <%= render 'chart' %>
+<% end %>
+<div><%= link_to 'Group by name', :group_by_name => true %></div>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Year</th>
+    <th>Gender</th>
+    <th>Count</th>
+  </tr>
+<% @names.each do |name| %>
+  <tr>
+    <td><%= link_to name.Name, :Name => name.Name %></td>
+    <td><%= name.Year %></td>
+    <td><%= name.Gender %></td>
+    <td><%= name.Count %></td>
+  </tr>
+<% end %>
+</table>
