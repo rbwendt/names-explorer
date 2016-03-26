@@ -1,7 +1,10 @@
 class NationalNamesController < ApplicationController
   def index
-    unless params[:Name].blank?
-      @all_names = NationalName.where(:Name => params[:Name])
+    @all_names = NationalName.all
+    [:Gender, :Name].each do |param|
+      unless params[param].blank?
+        @all_names = @all_names.where(param => params[param])
+      end
     end
     @names = NationalName.paginate(:page => params[:page])
     [:Gender, :Year, :Count, :Name].each do |param|
