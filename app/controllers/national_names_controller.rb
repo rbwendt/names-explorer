@@ -1,11 +1,5 @@
 class NationalNamesController < ApplicationController
   def index
-    @all_names = NationalName.all
-    [:Gender, :Name].each do |param|
-      unless params[param].blank?
-        @all_names = @all_names.where(param => params[param])
-      end
-    end
     @names = NationalName.paginate(:page => params[:page])
     [:Gender, :Year, :Count, :Name].each do |param|
       unless params[param].blank? && params.dig(:national_names, param).blank?
@@ -17,6 +11,13 @@ class NationalNamesController < ApplicationController
     end
     unless params[:group_by_name].nil?
       @names = @names.group(:Name, :Gender).select("Gender, '' as Year, Name, sum(Count) as Count").order('Count desc')
+    end
+  end
+
+  def show
+    @all_names = NationalName.where(:Name => params[:id])
+    unless params[:Gender].blank?
+      @all_names = @all_names.where(:Gender => params[:Gender])
     end
   end
 end

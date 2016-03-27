@@ -1,8 +1,5 @@
-<% if params[:Name].nil? %>
-  <h1>Names <%= "(#{@names.count})" unless @names.count.is_a?(Hash) %></h1>
-<% else %>
-  <h1><%= params[:Name] %></h1>
-<% end %>
+<h1>Names <%= "(#{@names.count})" unless @names.count.is_a?(Hash) %></h1>
+
 <%= form_tag("/national_names", method: "get") do %>
   <%= label_tag(:q, "Name:") %>
   <%= text_field_tag(:Name, params[:Name]) %>
@@ -16,9 +13,6 @@
   <%= submit_tag("Search") %>
 <% end %>
 <%= will_paginate @names %>
-<% unless params[:Name].blank? %>
-  <%= render 'chart' %>
-<% end %>
 <div><%= link_to 'Group by name', :group_by_name => true %></div>
 <table>
   <tr>
@@ -29,7 +23,7 @@
   </tr>
 <% @names.each do |name| %>
   <tr>
-    <td><%= link_to name.Name, :Name => name.Name %></td>
+    <td><%= link_to name.Name, national_name_path(name.Name, :Gender => name.Gender) %></td>
     <td><%= name.Year %></td>
     <td><%= name.Gender %></td>
     <td><%= name.Count %></td>
