@@ -1,2 +1,2 @@
-<h1><%= params[:id] %></h1>
+<h1><%= params[:id].split(',').join(', ') %></h1>
 <%= render 'chart' %>
